@@ -15,8 +15,6 @@ class Api extends CI_Controller
         parent::__construct();
         $this->output->set_header("Access-Control-Allow-Origin: *");
         $this->output->set_content_type('application/json');
-        $this->output->cache(60); // Will expire in 60 minutes
-        $this->output->enable_profiler(TRUE);
     }
 
     /**
@@ -27,8 +25,10 @@ class Api extends CI_Controller
         return $this->jsonIFy(array("message" => "we are live!"));
     }
 
+
+
     public function jsonIFy(array $data = array())
     {
-        echo json_encode($data);
+        echo json_encode(array('data' => $data));
     }
 }

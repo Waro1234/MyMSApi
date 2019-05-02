@@ -55,5 +55,13 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['api'] = 'api';
 
+//$route['tasks/(:num)/(:num)'] = 'api/tasks/$offset/$next';
+
 // Rankings
+$route['rankings/(:any)/(:any)/(:num)'] = 'rankings/jobAndSearchPaged/$type/$char/$page';
+$route['rankings/(:any)/(:any)'] = 'rankings/jobAndSearch/$type/$name';
+$route['rankings/(:num)'] = 'rankings/page/$page';
 $route['rankings'] = 'rankings';
+
+$route['news/(:any)'] = 'news/getNews/$type';
+$route['news'] = 'news';
