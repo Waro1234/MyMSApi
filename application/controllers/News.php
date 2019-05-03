@@ -30,31 +30,26 @@ class News extends CI_Controller
             'prev' => 1,
             'current' => 1,
             'next' => (sizeof($scanned) / 5 > 1 ? 2 : 1),
-            'last' => max(ceil(sizeof($scanned)),1),
+            'last' => max(ceil(sizeof($scanned)), 1),
             'data' => array()
         ));
-        foreach($scanned as $key=>$newsFile)
-        {
-            $key = $key -1;
-            if($key >=3)
-            {
+        foreach ($scanned as $key => $newsFile) {
+            $key = $key - 1;
+            if ($key >= 3) {
                 break;
             }
             $newsItem = json_decode(file_get_contents(APPPATH . 'third_party/news/' . $newsFile));
             array_push($news['data'], ($newsItem));
         }
-        return $this->jsonIFy($news);
+        return $this->jsonIFy($news, '200');
     }
 
     public function getNews($type)
     {
         $type = $this->uri->segment(2);
-        if (is_numeric($type))
-        {
+        if (is_numeric($type)) {
             return $this->newsById($type);
-        }
-        else if($type === 'all')
-        {
+        } else if ($type === 'all') {
             return $this->allNews();
         }
     }
@@ -66,43 +61,45 @@ class News extends CI_Controller
         $scanned = array_diff(scandir($dir), array('..', '.'));
 
         $news = array();
-        foreach($scanned as $newsFile)
-        {
-            array_push($news,  json_decode(file_get_contents(APPPATH . 'third_party/news/' . $newsFile)));
+        foreach ($scanned as $newsFile) {
+            array_push($news, json_decode(file_get_contents(APPPATH . 'third_party/news/' . $newsFile)));
         }
-        return $this->jsonIFy($news);
+        return $this->jsonIFy($news, '200');
     }
 
     public function newsById($id)
     {
-        echo "asdsa";
         $id = (int)$id;
 
         $dir = APPPATH . 'third_party/news';
-        $scanned = array_slice(scandir($dir),2);
+        $scanned = array_slice(scandir($dir), 2);
         $news = (array(
             'success' => true,
-            'prev' => max($id-1,1),
+            'prev' => max($id - 1, 1),
             'current' => $id,
-            'next' => min($id +1, ceil(sizeof($scanned)/5)),
-            'last' => ceil(sizeof($scanned)/5),
+            'next' => $id + 1,
+            'last' => sizeof($scanned),
             'data' => array()
         ));
 
-        foreach($scanned as $key=>$newsFile)
-        {
-            if ($key >= ($id - 1) * 5 && $key <= $id* 5) {
-                $newsItem = json_decode(file_get_contents(APPPATH . 'third_party/news/' . $newsFile));
+        try {
+            $newsItem = json_decode(file_get_contents(APPPATH . 'third_party/news/' . $id . '.json'));
+            if ($newsItem !== null) {
                 array_push($news['data'], ($newsItem));
-            }else {
-                echo "false";
+                return $this->jsonIFy($news, '200');
+            } else {
+                return $this->jsonIFy($news, '404');
             }
+        } catch (Exception $ex) {
+            return $this->jsonIFy($news, '500');
         }
-        return $this->jsonIFy($news);
     }
 
-    public function jsonIFy(array $data = array())
+    public function jsonIFy($data, $status)
     {
-        echo json_encode($data);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_status_header($status)
+            ->set_output(json_encode($data));
     }
 }

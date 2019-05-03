@@ -11,6 +11,7 @@ class Rankings extends CI_Controller
 {
 
     private $jobs;
+
     public function __construct()
     {
         parent::__construct();
@@ -34,10 +35,10 @@ class Rankings extends CI_Controller
     public function page($page)
     {
         // Remove 1 so we do it based on zero
-        $page = (int)$this->uri->segment(2) -1;
+        $page = (int)$this->uri->segment(2) - 1;
         $ranks = $this->getMappedRankings();
 
-        $filter = array_filter($ranks, function($key) use ($page) {
+        $filter = array_filter($ranks, function ($key) use ($page) {
             // Filter
             return $key >= (0 + ($page ? $page * 10 : 0)) && $key <= (9 + ($page ? $page * 10 : 0));
         }, ARRAY_FILTER_USE_KEY); // Tell the filter to filter based on keys
@@ -55,46 +56,34 @@ class Rankings extends CI_Controller
 
         $ranks = $this->getMappedRankings();
         $filter = array();
-        if(strcmp($type, 'job') === 0)
-        {
+        if (strcmp($type, 'job') === 0) {
             $jobs = $this->jobs;
-            $filter = array_filter($ranks, function ($item,$key) use ($char, $jobs)
-            {
-                return (strcasecmp(strtolower($jobs[$item['job']]['name']), $char) === 0) && ($key >=0 && $key <= 9);
+            $filter = array_filter($ranks, function ($item, $key) use ($char, $jobs) {
+                return (strcasecmp(strtolower($jobs[$item['job']]['name']), $char) === 0) && ($key >= 0 && $key <= 9);
             }, ARRAY_FILTER_USE_BOTH);
-        }
-        else if(strcmp($type, 'search') === 0)
-        {
-            $filter = array_filter($ranks, function ($item,$key) use ($char)
-            {
-                return (strcasecmp($item['name'], $char) === 0) && ($key >=0 && $key <= 9);
-
+        } else if (strcmp($type, 'search') === 0) {
+            $filter = array_filter($ranks, function ($item, $key) use ($char) {
+                return (strcasecmp($item['name'], $char) === 0) && ($key >= 0 && $key <= 9);
             }, ARRAY_FILTER_USE_BOTH);
-
         }
         return $this->jsonIFy($filter);
     }
 
-    public function jobAndSearchPaged($type, $char,$page)
+    public function jobAndSearchPaged($type, $char, $page)
     {
         $type = $this->uri->segment(2);
         $char = $this->uri->segment(3);
-        $page = (int)$this->uri->segment(4) -1;
+        $page = (int)$this->uri->segment(4) - 1;
         $ranks = $this->getMappedRankings();
 
         $filter = array();
-        if(strcmp($type, 'job') === 0)
-        {
+        if (strcmp($type, 'job') === 0) {
             $jobs = $this->jobs;
-            $filter = array_filter($ranks, function ($item,$key) use ($char, $jobs,$page)
-            {
+            $filter = array_filter($ranks, function ($item, $key) use ($char, $jobs, $page) {
                 return (strcasecmp(strtolower($jobs[$item['job']]['name']), strtolower($char)) === 0) && ($key >= (0 + ($page ? $page * 10 : 0)) && $key <= (9 + ($page ? $page * 10 : 0)));
             }, ARRAY_FILTER_USE_BOTH);
-        }
-        else if(strcmp($type, 'search') === 0)
-        {
-            $filter = array_filter($ranks, function ($item,$key) use ($char,$page)
-            {
+        } else if (strcmp($type, 'search') === 0) {
+            $filter = array_filter($ranks, function ($item, $key) use ($char, $page) {
                 return (strcasecmp($item['name'], $char) === 0) && ($key >= (0 + ($page ? $page * 10 : 0)) && $key <= (9 + ($page ? $page * 10 : 0)));
 
             }, ARRAY_FILTER_USE_BOTH);
@@ -105,7 +94,7 @@ class Rankings extends CI_Controller
 
     public function getMappedRankings()
     {
-        $rankings =$this->rankingsmodel->getAllRankings();
+        $rankings = $this->rankingsmodel->getAllRankings();
         return array_map(array($this, 'mapRank'), $rankings, array_keys($rankings));
     }
 
