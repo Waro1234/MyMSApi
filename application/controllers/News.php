@@ -95,6 +95,26 @@ class News extends CI_Controller
         }
     }
 
+    public function editPost($id){
+        $id = (int)$this->uri->segment(2);
+
+        $filePath = APPPATH . 'third_party/news/' . $id . '.json';
+        $newsItem = json_decode(file_get_contents($filePath),true);
+        if($newsItem !== null){
+            $newsItem['views']++;
+            file_put_contents($filePath,json_encode($newsItem));
+            return $this->jsonIFy(array(
+                "success" => true,
+                "data" => $newsItem
+            ),200);
+        } else {
+            return $this->jsonIFy(array(
+                "success" => false,
+                "error" => "Post does not exist"
+            ),404);
+        }
+    }
+
     public function jsonIFy($data, $status)
     {
         $this->output

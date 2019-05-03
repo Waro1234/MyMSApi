@@ -63,5 +63,6 @@ $route['rankings/(:any)/(:any)'] = 'rankings/jobAndSearch/$type/$name';
 $route['rankings/(:num)'] = 'rankings/page/$page';
 $route['rankings'] = 'rankings';
 
+$route['post/(:num)'] = 'news/editPost/$id';
 $route['news/(:any)'] = 'news/getNews/$type';
 $route['news'] = 'news';
