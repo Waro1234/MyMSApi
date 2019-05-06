@@ -25,7 +25,7 @@ class Rankings extends CI_Controller
      */
     public function index()
     {
-        return $this->jsonIFy($this->getMappedRankings());
+        return $this->jsonIFy($this->getMappedRankings(), 200);
     }
 
     /**
@@ -42,7 +42,7 @@ class Rankings extends CI_Controller
             // Filter
             return $key >= (0 + ($page ? $page * 10 : 0)) && $key <= (9 + ($page ? $page * 10 : 0));
         }, ARRAY_FILTER_USE_KEY); // Tell the filter to filter based on keys
-        return $this->jsonIFy($filter);
+        return $this->jsonIFy($filter, 200);
     }
 
     /**
@@ -66,7 +66,7 @@ class Rankings extends CI_Controller
                 return (strcasecmp($item['name'], $char) === 0) && ($key >= 0 && $key <= 9);
             }, ARRAY_FILTER_USE_BOTH);
         }
-        return $this->jsonIFy($filter);
+        return $this->jsonIFy($filter, 200);
     }
 
     public function jobAndSearchPaged($type, $char, $page)
@@ -89,7 +89,7 @@ class Rankings extends CI_Controller
             }, ARRAY_FILTER_USE_BOTH);
 
         }
-        return $this->jsonIFy($filter);
+        return $this->jsonIFy($filter, 200);
     }
 
     public function getMappedRankings()
@@ -104,8 +104,14 @@ class Rankings extends CI_Controller
         return $ranking;
     }
 
-    public function jsonIFy(array $data = array())
+    public function jsonIFy($data, $status)
     {
-        echo json_encode(array('data' => $data));
+        $this->output
+            ->set_content_type('application/json')
+            ->set_status_header($status)
+            ->set_output(json_encode(array(
+                'data' => $data
+            )));
     }
+    
 }

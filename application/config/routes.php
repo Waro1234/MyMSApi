@@ -49,20 +49,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-//$route['default_controller'] = 'api';
+$route['default_controller'] = 'api';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['api'] = 'api';
+// $route['api'] = 'api';
+$route['server']['GET'] = 'api/server';
+$route['settings']['POST'] = 'api/settings';
 
-//$route['tasks/(:num)/(:num)'] = 'api/tasks/$offset/$next';
+//Account
+$route['join']['POST'] = 'accounts/register';
+$route['login']['POST'] = 'accounts/login';
+$route['logout']['GET'] = 'accounts/logout';
 
 // Rankings
-$route['rankings/(:any)/(:any)/(:num)'] = 'rankings/jobAndSearchPaged/$type/$char/$page';
-$route['rankings/(:any)/(:any)'] = 'rankings/jobAndSearch/$type/$name';
-$route['rankings/(:num)'] = 'rankings/page/$page';
-$route['rankings'] = 'rankings';
+$route['rankings/(:any)/(:any)/(:num)']['GET'] = 'rankings/jobAndSearchPaged/$type/$char/$page';
+$route['rankings/(:any)/(:any)']['GET'] = 'rankings/jobAndSearch/$type/$name';
+$route['rankings/(:num)']['GET'] = 'rankings/page/$page';
+$route['rankings']['GET'] = 'rankings';
 
-$route['post/(:num)'] = 'news/editPost/$id';
-$route['news/(:any)'] = 'news/getNews/$type';
-$route['news'] = 'news';
+// News
+$route['post/(:num)']['GET'] = 'news/editPost/$id';
+$route['news/(:any)']['GET'] = 'news/getNews/$type';
+$route['news']['GET'] = 'news';
+
+//Votes
+$route['playerVoted/(:any)/(:any)/(:num)']['POST'] = 'vote/vote/$username/$ip/$site';
+$route['vote/(:any)/(:any)']['GET'] = 'vote/getVotes/$username/$ip';

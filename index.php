@@ -54,7 +54,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 // Domain-based environment
-if ($_SERVER['SERVER_NAME'] == 'local_server_name') {
+if ($_SERVER['SERVER_NAME'] == 'BUILT IN WEBSERVER') {
     define('ENVIRONMENT', 'development');
 } else {
     define('ENVIRONMENT', 'production');

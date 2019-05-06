@@ -22,13 +22,53 @@ class Api extends CI_Controller
      */
     public function index()
     {
-        return $this->jsonIFy(array("message" => "we are live!"));
+        return $this->jsonIFy(array(
+            'logged_in' => false,
+            'username' => "",
+            'gm_level' => 0
+        ),200);
+    }
+
+    public function server() 
+    {
+        return $this->jsonIFy(array(
+            'server_status' => array(
+                array (
+                    'name' => 'REST API',
+                    'status' => true
+                ),
+                array(
+                    'name' => 'Channel 1',
+                    'status' => false
+                ),
+                array(
+                    'name' => 'Gnomed',
+                    'status' => true
+                )
+            ),
+            'online_count' => 0,
+            'alert' => 'The website is currently under maintenance!'
+        ),200);
+    }
+
+    public function settings()
+    {
+        $alert = $this->input->post('alert');
+        return $this->jsonIFy(array(
+            'success' => true,
+            'data' => array(
+                'alert' => $alert
+            )
+        ),200);
     }
 
 
 
-    public function jsonIFy(array $data = array())
+    public function jsonIFy($data, $status)
     {
-        echo json_encode(array('data' => $data));
+        $this->output
+            ->set_content_type('application/json')
+            ->set_status_header($status)
+            ->set_output(json_encode($data));
     }
 }
