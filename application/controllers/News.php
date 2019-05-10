@@ -13,7 +13,6 @@ class News extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //http://161.142.103.225
     }
 
     /**

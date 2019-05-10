@@ -13,6 +13,11 @@ class AccountModel extends CI_Model
         parent::__construct();
     }
 
+    public function getOnline()
+    {
+        return $this->db->query('SELECT COUNT(id) as online FROM accounts where loggedin > 0')->row()->online;
+    }
+
     public function getAccount($username)
     {
         $username = $this->db->escape($username);

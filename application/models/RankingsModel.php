@@ -15,7 +15,7 @@ class RankingsModel extends CI_Model
 
     public function getAllRankings()
     {
-        return $this->db->query('SELECT * FROM characters3 WHERE gm < 3 ORDER BY rebirths DESC')->result_array();
+        return $this->db->query('SELECT * FROM characters WHERE gm < 3 ORDER BY rebirths DESC')->result_array();
     }
 
 }

@@ -15,8 +15,8 @@ class Vote extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('votemodel');
-        $this->load->model('accountmodel');
+        $this->load->model('VoteModel');
+        $this->load->model('AccountModel');
         $this->jobs = json_decode(file_get_contents(APPPATH . 'controllers/Jobs.json'), true);
 
     }
@@ -29,9 +29,9 @@ class Vote extends CI_Controller
         $username = $this->uri->segment(2);
         $ip = $this->uri->segment(3);
         $ip = str_replace('_', '.',$ip);
-        $voteRec = $this->votemodel->getVoteTimesFromUser($username);
+        $voteRec = $this->VoteModel->getVoteTimesFromUser($username);
         if ($voteRec === null || sizeof($voteRec) === 0) {
-            $voteRec =$this->votemodel->newVotingAccount($username,$ip);
+            $voteRec =$this->VoteModel->newVotingAccount($username,$ip);
         }
         $now = $this->millitime();
         return $this->jsonIFy(array(
@@ -49,20 +49,20 @@ class Vote extends CI_Controller
         $ip = str_replace('_', '.', $this->uri->segment(3));
         $site = array('gtop','topg','xtreme')[$this->uri->segment(4)];
 
-        $account = $this->accountmodel->getAccount($username);
+        $account = $this->AccountModel->getAccount($username);
         if ($account !== null) {
-            $accountUpdated = $this->accountmodel->updateVote($username);
+            $accountUpdated = $this->AccountModel->updateVote($username);
             if ($accountUpdated) {
-                $voteRec = $this->votemodel->getVoteTimesFromUser($username);
+                $voteRec = $this->VoteModel->getVoteTimesFromUser($username);
                 if ($voteRec === null || sizeof($voteRec) === 0) {
-                    $voteRec =$this->votemodel->newVotingAccount($username,$ip);
+                    $voteRec =$this->VoteModel->newVotingAccount($username,$ip);
                     $voteRec['gtopTimes'] = 0;
                     $voteRec['topgTimes'] = 0;
                     $voteRec['xtremeTimes'] = 0;
                 }
-
-                if($voteRec->id !== null) {
-                    $this->votemodel->vote($voteRec->id, $site, $this->millitime());
+                $canVote = $this->getVotes($username, $ip)[$site]; // extra layer of security
+                if($voteRec->id !== null && $canVote) {
+                    $this->VoteModel->vote($voteRec->id, $site, $this->millitime());
                     return $this->jsonIFy(array('success' => true),202);
                 } else {
                     return $this->jsonIFy(array(
@@ -105,6 +105,5 @@ class Vote extends CI_Controller
             ->set_content_type('application/json')
             ->set_status_header($status)
             ->set_output(json_encode($data));
-//        echo json_encode(array('data' => $data));
     }
 }

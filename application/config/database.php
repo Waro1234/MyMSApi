@@ -78,27 +78,6 @@ $username = 'yatogamitetsu';
 $password = 'yatogamitetsu01';
 $database = 'maplelight';
 
-//$db['default'] = array(
-//	'dsn'	=> 'mysql:host=' & $hostname &'; dbname=' & $database &'; charset=utf8;',
-//	'hostname' =>  $hostname,
-//	'username' => $username,
-//	'password' => $password,
-//	'database' => '',
-//	'dbdriver' => 'pdo',
-//	'dbprefix' => '',
-//	'pconnect' => FALSE,
-//	'db_debug' => (ENVIRONMENT !== 'production'),
-//	'cache_on' => FALSE,
-//	'cachedir' => '',
-//	'char_set' => 'utf8',
-//	'dbcollat' => 'utf8_general_ci',
-//	'swap_pre' => '',
-//	'encrypt' => FALSE,
-//	'compress' => FALSE,
-//	'stricton' => FALSE,
-//	'failover' => array(),
-//	'save_queries' => TRUE
-//);
 $db['default'] = array(
     'dsn'  => 'mysql:host=db4free.net; dbname=maplelight; charset=utf8;',
     'hostname' => $hostname,
@@ -107,8 +86,8 @@ $db['default'] = array(
     'database' => '',
     'dbdriver' => 'pdo',
     'dbprefix' => '',
-    'pconnect' => TRUE,
-    'db_debug' => TRUE,
+    'pconnect' => FALSE,
+    'db_debug' => FALSE,
     'cache_on' => FALSE,
     'cachedir' => '' ,
     'char_set' => 'utf8',

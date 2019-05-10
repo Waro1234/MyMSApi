@@ -14,7 +14,7 @@ class Accounts extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('accountmodel');
+        $this->load->model('AccountModel');
     }
 
     public function register() 
@@ -37,9 +37,9 @@ class Accounts extends CI_Controller
             ), 400); //400 = bad request
         } 
 
-        $exists = $this->accountmodel->accountExists($_POST['username']);
+        $exists = $this->AccountModel->accountExists($_POST['username']);
         if(!$exists) {
-            $inserted = $this->accountmodel->register($this->input->post('username'), $this->input->post('password'), $date, $this->input->post('email'), $this->input->post('ip'));
+            $inserted = $this->AccountModel->register($this->input->post('username'), $this->input->post('password'), $date, $this->input->post('email'), $this->input->post('ip'));
             if($inserted) {
                 return $this->jsonIFy(array(
                     'success' => true
@@ -62,7 +62,7 @@ class Accounts extends CI_Controller
     {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
-        $account = $this->accountmodel->login($username);
+        $account = $this->AccountModel->login($username);
         if (!empty($account)) {
             $encrypted = base64_encode(hex2bin(hash('sha1', $password)));
             if ($encrypted === $account[0]->password) {

@@ -13,8 +13,7 @@ class Api extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->output->set_header("Access-Control-Allow-Origin: *");
-        $this->output->set_content_type('application/json');
+        $this->load->model('AccountModel');
     }
 
     /**
@@ -46,7 +45,7 @@ class Api extends CI_Controller
                     'status' => true
                 )
             ),
-            'online_count' => 0,
+            'online_count' => $this->AccountModel->getOnline(),
             'alert' => 'The website is currently under maintenance!'
         ),200);
     }

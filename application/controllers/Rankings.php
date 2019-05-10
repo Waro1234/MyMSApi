@@ -15,7 +15,7 @@ class Rankings extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('rankingsmodel');
+        $this->load->model('RankingsModel');
         $this->jobs = json_decode(file_get_contents(APPPATH . 'controllers/Jobs.json'), true);
 
     }
@@ -94,7 +94,7 @@ class Rankings extends CI_Controller
 
     public function getMappedRankings()
     {
-        $rankings = $this->rankingsmodel->getAllRankings();
+        $rankings = $this->RankingsModel->getAllRankings();
         return array_map(array($this, 'mapRank'), $rankings, array_keys($rankings));
     }
 
